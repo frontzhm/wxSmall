@@ -1,3 +1,16 @@
+/* pages/search/search.wxss */
+.search-wrap{
+
+  border-bottom:1px solid #ccc;
+  border-top:1px solid #ccc;
+}
+.search-input{
+  padding:3px 10px;
+  font-size: 28rpx;
+}
+
+
+/*列表区  */
 .film-list-wrap{
    height:1280rpx; 
 }
@@ -29,14 +42,14 @@
 }
 
 .file-item-rating,.file-item-directors,.file-item-casts{
-  margin-top:3px;
+  margin-top:15rpx;
   color:#999;
   font-size:26rpx;
 }
 .file-item-rating{
   color:#ffb712;
   font-size:30rpx;
-  margin-top:10px;
 }
-
-
+.file-item-casts{
+  margin-top:10rpx;
+}

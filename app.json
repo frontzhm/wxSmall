@@ -1,13 +1,29 @@
 {
   "pages":[
+    
     "pages/index/index",
-    "pages/logs/logs"
+    "pages/search/search",
+    "pages/detail/detail"
+    
   ],
   "window":{
     "backgroundTextStyle":"light",
     "navigationBarBackgroundColor": "#fff",
     "navigationBarTitleText": "首页",
     "navigationBarTextStyle":"black"
-  }
+  },
+    "tabBar": {
+      "position":"top",
+      "list": [
+        {
+          "pagePath": "pages/index/index",
+          "text": "热门电影"
+        },
+        {
+          "pagePath": "pages/search/search",
+          "text": "搜索"
+        }
+      ]
+    }
   
 }

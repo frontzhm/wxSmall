@@ -1,29 +1,46 @@
-//index.js
-//获取应用实例
-var app = getApp()
+// import { RGBaster} from '../../utils/rgbaster'
+const {get} = getApp()
+
+const COUNT = 20
+const MAX_LENGTH = 250
+// 变量不能放在这  不然切换页面的时候不是初始值
+// let start = 0
+
+
 Page({
   data: {
-    motto: 'Hello World',
-    userInfo: {},
+    filmList: [],
+    start: 0
   },
-  //事件处理函数
-  bindViewTap: function() {
-    wx.navigateTo({
-      url: '../logs/logs'
-    })
+  onLoad(data){
+    console.log(data)
+    this.ajaxFilmList()
   },
-  onLoad: function () {
-    console.log('onLoad')
-    var that = this
-    //调用应用实例的方法获取全局数据
-    app.getUserInfo(function(userInfo){
-      //更新数据
-      that.setData({
-        userInfo:userInfo
+  loadMore(){
+    (this.data.filmList.length < MAX_LENGTH) && this.ajaxFilmList()
+  },
+  ajaxFilmList() {
+    wx.showLoading()
+    const that = this
+    get(`https://api.douban.com/v2/movie/top250?count=${COUNT}&start=${this.start}`)
+      .then(data => {
+        console.log(data)
+        data.subjects.forEach(item => {
+          item.directors = item.directors.map(director => director.name).join('/')
+          item.casts = item.casts.map(cast => cast.name).join('/')
+        })
+        that.setData({
+          filmList: that.data.filmList.concat(data.subjects)
+        })
+        wx.hideLoading()
       })
-    })
+      // 每次请求就累加一次
+    this.start += COUNT
   },
-  clickfn(e){
-    console.log(e)
+  goDetailPage(e){
+    const id = e.currentTarget.dataset.id
+    wx.navigateTo({
+      url: `../detail/detail?id=${id}`,
+    })
   }
 })

@@ -1,8 +1,11 @@
 # wxSmall
 
 玩下微信小程序
+做了下豆瓣电影
 
 ## 代码构成
+
+也就是一个页面,可以有 `demo.json demo.wxml demo.wxss demo.js`
 
 ### JSON配置
 
@@ -212,3 +215,104 @@ WXML提供模板（template），可以在模板中定义代码片段，然后�
 <import src="item.wxml"/>
 <template is="item" data="{{text: 'forbar'}}"/>
 ```
+
+### [WXSS 样式](https://mp.weixin.qq.com/debug/wxadoc/dev/framework/view/wxss.html)
+
+WXSS 具有 CSS 大部分特性。同时为了更适合开发微信小程序，WXSS 对 CSS 进行了扩充以及修改。
+定义在 app.wxss 中的样式为全局样式，作用于每一个页面。在 page 的 wxss 文件中定义的样式为局部样式，只作用在对应的页面，并会覆盖 app.wxss 中相同的选择器.
+新增的特性:
+
+*  新单位rpx（responsive pixel）: 可以根据屏幕宽度进行自适应。规定屏幕宽为750rpx。如在 iPhone6 上，屏幕宽度为375px，共有750个物理像素，则750rpx = 375px = 750物理像素，1rpx = 0.5px = 1物理像素。
+* 样式导入 `@import "common.wxss";`
+
+### js交互逻辑
+
+一个服务仅仅只有界面展示是不够的，还需要和用户做交互：响应用户的点击、获取用户的位置等等。在小程序里边，我们就通过编写 js 脚本文件来处理用户的操作。
+
+## 小程序的能力
+
+### [小程序的启动  app](https://mp.weixin.qq.com/debug/wxadoc/dev/framework/app-service/app.html)
+
+微信客户端在打开小程序之前，
+
+1. 会把整个小程序的代码包下载到本地。
+2. 通过 app.json 的 pages 字段就可以知道你当前小程序的所有页面路径, 写在 pages 字段的第一个页面就是这个小程序的首页(打开小程序看到的第一个页面
+3. 微信客户端就把首页的代码装载进来，通过小程序底层的一些机制，就可以渲染出这个首页。
+4. 小程序启动之后，在 app.js 定义的 App 实例的 onLaunch 回调会被执行:
+
+```js
+App({
+  onLaunch: function () {
+    // 小程序启动之后 触发
+  },
+  onShow: function() {},
+  // 全局访问的
+  customKey: 'customValue'
+})
+```
+
+整个小程序只有一个 App 实例，是全部页面共享的
+App() 函数用来注册一个小程序。接受一个 object 参数，其指定小程序的生命周期函数等。
+
+* App() 必须在 app.js 中注册，且不能注册多个。
+* 不要在定义于 App() 内的函数中调用 getApp() ，使用 this 就可以拿到 app 实例。`this.customKey`
+* 不要在 onLaunch 的时候调用 getCurrentPages()，此时 page 还没有生成。
+* 通过 getApp() 获取实例之后，不要私自调用生命周期函数。`getApp().customKey`
+
+### [程序与页面 page](https://mp.weixin.qq.com/debug/wxadoc/dev/framework/app-service/page.html)
+
+pages/logs/logs 下其实是包括了4种文件的，
+1. 微信客户端会先根据 logs.json 配置生成一个界面，顶部的颜色和文字你都可以在这个 json 文件里边定义好。
+2. 装载这个页面的 WXML 结构和 WXSS 样式。
+3. 装载 logs.js，你可以看到 logs.js 的大体内容就是:
+
+```js
+Page({
+  data: { // 参与页面渲染的数据
+    logs: []
+  },
+  onLoad: function () {
+    // 页面渲染后 执行
+  },
+  customKey: 'customValue'
+})
+```
+
+Page() 函数用来注册一个页面。接受一个 object 参数，其指定页面的初始数据、生命周期函数、事件处理函数等。
+
+### [api](https://mp.weixin.qq.com/debug/wxadoc/dev/api/?t=20171227)
+
+框架提供丰富的微信原生API，可以方便的调起微信提供的能力，如获取用户信息，本地存储，支付功能等。
+
+要获取用户的地理位置时，只需要：
+
+```js
+wx.getLocation({
+  type: 'wgs84',
+  success: (res) => {
+    var latitude = res.latitude // 经度
+    var longitude = res.longitude // 纬度
+  }
+})
+```
+
+* wx.on 开头的 API 是监听某个事件发生的API接口，接受一个 CALLBACK 函数作为参数。当该事件触发时，会调用 CALLBACK 函数。
+* 如未特殊约定，其他 API 接口都接受一个OBJECT作为参数。
+* OBJECT中可以指定success, fail, complete来接收接口调用结果。
+
+api接口太多,大致分类
+
+* 网络 (发起请求 发起websocket..)
+* 媒体 (选择图片 拍照 摄像 录音...)
+* 文件 (文件的增删改查)
+* 数据缓存 (storage 设置 获取 清除)
+* 位置 (获取位置)
+* 设备 (获取手机的数据 联系人 蓝牙 截屏事件 震动  剪贴板 wifi..)
+* 界面 (提示框 弹出层 标题 下拉刷新 链接)
+* wxml的节点信息 (获取某个节点)
+* 第三方平台
+* 开放接口 (微信能提供的  获取用户信 登录  授权 支付 获取二维码 设置 微信运动  附近 )
+* 数据 (用户访问数据的趋势和概况)
+* 调试接口 (打开和关闭调试)
+
+[免费的api接口](https://www.zhihu.com/question/32225726)

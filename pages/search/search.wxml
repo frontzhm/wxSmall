@@ -1,11 +1,9 @@
-
-<view>
-  <!-- 导航栏 -->
-  <view>
-    
-  </view>
+<!--pages/search/search.wxml-->
+<view class="search-wrap">
+  <input class="search-input" confirm-type="search" placeholder="搜索电影或者演员" focus="true" bindconfirm="search"/>
+</view>
   <!-- 列表区 -->
-  <scroll-view scroll-y="true" class="film-list-wrap" enable-back-to-top="true" bindscrolltolower="loadMore" >
+  <scroll-view scroll-y="true" class="film-list-wrap" enable-back-to-top="true">
     <view class="film-list">
       <!-- item -->
       <view class="file-item"  wx:for="{{filmList}}" wx:key="id" bindtap="goDetailPage" data-id="{{item.id}}">
@@ -24,4 +22,4 @@
       </view>
     </view>
   </scroll-view>
-</view>
+

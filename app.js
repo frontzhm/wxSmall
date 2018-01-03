@@ -1,11 +1,28 @@
 //app.js
+
+function get(url) {
+  return new Promise((resolve, reject) => {
+    wx.request({
+      url,
+      header: {
+        "Content-Type": "json"
+      },
+      success: function (data) {
+        resolve(data.data)
+      },
+      fail: function (error) {
+        reject(error)
+      }
+    })
+  })
+
+}
+
+
+
 App({
   onLaunch: function(options) {
-    console.log(options)
-    //调用API从本地缓存中获取数据
-    var logs = wx.getStorageSync('logs') || []
-    logs.unshift(Date.now())
-    wx.setStorageSync('logs', logs)
+
   },
 
   getUserInfo: function(cb) {
@@ -27,5 +44,22 @@ App({
 
   globalData: {
     userInfo: null
+  },
+  get(url) {
+    return new Promise((resolve, reject) => {
+      wx.request({
+        url,
+        header: {
+          "Content-Type": "json"
+        },
+        success: function (data) {
+          resolve(data.data)
+        },
+        fail: function (error) {
+          reject(error)
+        }
+      })
+    })
+
   }
 })

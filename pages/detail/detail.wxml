@@ -1,0 +1,50 @@
+<!--pages/detail/detail.wxml-->
+<!-- 海报区 -->
+<view class="poster-wrap">
+  <image src="{{film.images.large}}"></image>
+</view>
+<!-- 介绍区域  -->
+<view class="info-wrap">
+  <!-- 标题区  -->
+  <view class="title-wrap">
+    <!-- 左边  -->
+    <view class="title-wrap-left">
+      <view class="title">{{film.title}}</view>
+      <!-- <view wx:if=""></view> -->
+      <view class="site-pubdate-duration">
+        <view class="site">{{film.year}} / {{film.countries}} / {{film.genres}}</view>
+        <!-- <view class="pubdate">{{film.mainland_pubdate}}</view> -->
+        <!-- <view class="duration">{{film.duration}}</view> -->
+      </view>
+    </view>
+    <!-- 右边  -->
+    <view class="title-wrap-right">
+      <view class="rating-title">豆瓣评分</view>
+      <view class="rating">{{film.rating.average}}</view>
+      <!-- <view class="star"></view> -->
+      <view class="rating-count">{{film.ratings_count}}人</view>
+    </view>
+  </view>
+  <!--剧情简介  -->
+  <view class="summary-wrap">
+    <view class="section-title">剧情简介</view>
+    <view class="summary" >{{film.summaryFrag}}<text class="expand-wrap" wx:if="{{isShowExpandBtn}}" bindtap="expandSummary"><text class="ellips">...</text><text class="expand-btn">展开</text></text></view>
+  </view>
+  <!-- 影人  -->
+  <view class="casts-wrap">
+    <view class="section-title">影人</view>
+    <scroll-view scroll-x="true">
+      <view class="casts-list">
+        <view class="cast-item" wx:for="{{film.directorsAndCasts}}" wx:key="id">
+          <view class="cast-item-poster">
+            <image src="{{item.avatars.small}}" alt="{{item.name}}"></image>
+          </view>
+          <view class="cast-item-name">{{item.name}}</view>
+          <!-- <view class="cast-item-role">{{}}</view> -->
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+
+  
+</view>
